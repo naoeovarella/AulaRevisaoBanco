@@ -4,12 +4,14 @@ import crud.EntidadeJDBC
 import entidades.CaixaDAgua
 import enumeradores.Material
 
+val conectar = EntidadeJDBC(
+    url = "jdbc:postgresql://localhost:5432/postgres",
+    usuario = "postgres",
+    senha = "root"
+)
+
 fun criarTabelaCaixa(){
-    val conectar = EntidadeJDBC(
-        url = "jdbc:postgresql://localhost:5432/postgres",
-        usuario = "postgres",
-        senha = "root"
-    )
+
     /**
     val material: Material,
     val capacidade: Int,
@@ -54,7 +56,7 @@ fun cadastrarCaixa(){
     val marca: String,
      */
     println("Digite o material do qual a caixa é composta")
-    println("1 - Plástico")
+    println("2 - Plástico")
     println("1 - PVC")
     println("3 - Metal")
     println("4 - Argamassa")
@@ -72,29 +74,30 @@ fun cadastrarCaixa(){
     println("Digite a capacidade da caixa")
     val capacidade = readln().toInt()
 
-    println("Digite a capacidade da caixa")
+    println("Digite a cor da caixa")
     val cor = readln().toString()
 
-    println("Digite a capacidade da caixa")
+    println("Digite o peso da caixa")
     val peso  = readln().toDouble()
 
-    println("Digite a capacidade da caixa")
+    println("Digite o preço da caixa")
     val preco = readln().toDouble()
 
-    println("Digite a capacidade da caixa")
+    println("Digite a altura da caixa")
     val altura = readln().toDouble()
 
-    println("Digite a capacidade da caixa")
+    println("Digite a profundidade da caixa")
     val profundidade = readln().toDouble()
 
-    println("Digite a capacidade da caixa")
+    println("Digite a largura da caixa")
     val largura = readln().toDouble()
 
-    println("Digite a capacidade da caixa")
+    println("Digite a marca da caixa")
     val marca = readln().toString()
 
 //    Salvar váriaveis agora dentro da classe
-    CaixaDAgua(
+
+    val c = CaixaDAgua(
         material = material,
         capacidade = capacidade,
         cor = cor,
@@ -105,6 +108,24 @@ fun cadastrarCaixa(){
         largura = largura,
         marca = marca
     )
+   val banco = conectar.conectarComBanco()!!.prepareStatement(
+    "INSERT INTO CaixaDAgua" +
+        " (material, capacidade, cor, peso, preco, altura, profundidade, largura, marca)" +
+        " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    )
+        banco.setString(1, c.material.name)
+        banco.setInt(2, c.capacidade!!)
+        banco.setString(3, c.cor)
+        banco.setDouble(4, c.peso)
+        banco.setDouble(5, c.preco)
+        banco.setDouble(6, c.altura)
+        banco.setDouble(7, c.profundidade)
+        banco.setDouble(8, c.largura)
+        banco.setString(9, c.marca)
+        banco.executeUpdate()//Isso fará COMMIT no banco
+
+        banco.close()//Fecha Transação e a conexão com o banco
+
 
 }
 
