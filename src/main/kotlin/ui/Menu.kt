@@ -16,7 +16,8 @@ fun menu(){
         val opcao = readln().toInt()
 
         when (opcao){
-            1-> cadastrarCaixa()
+            //Sempre que for cadastrar uma caixa nova o ID vai ser 0
+            1-> cadastrarCaixa(id = 0)
             2-> editarCaixa()
             3-> listarCaixas()
             4-> excluirCaixa()
